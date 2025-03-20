@@ -55,7 +55,7 @@ In the `dndItemCards.tex` file, an array is defined for all the cards to be incl
 To quickly generate a list, you can use
 ```
 ls cards | grep -Po '.*(?=\.)' | paste -sd, - | xclip -selection clipboard
-```ls cards | grep -Po '.*(?=\.)' | paste -sd, - | xclip -selection clipboard
+```
 to copy a comma-separated list of all files in the cards folder onto your clipboard.
 
 Run `pdflatex` (or your preferred engine), and things should be good.
