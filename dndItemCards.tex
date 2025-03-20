@@ -1,0 +1,143 @@
+\documentclass[letterpaper]{article}
+\usepackage[top=.2in, bottom=.1in, left=.1in, right=.1in]{geometry}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[singlelinecheck=false]{caption}
+\usepackage{lipsum}
+\usepackage{listings}
+\usepackage{shortvrb}
+\usepackage{stfloats}
+\usepackage[svgnames]{xcolor}
+\usepackage{tcolorbox}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{pgffor}  % Needed for dynamic loops
+\tcbuselibrary{skins}
+\usepackage{afterpage} % For controlling page breaks
+\usepackage{ifthen} % Add the ifthen package
+
+%\captionsetup[table]{labelformat=empty,font={sf,sc,bf,},skip=0pt}
+\MakeShortVerb{|}
+\lstset{%
+  basicstyle=\ttfamily,
+  language=[LaTeX]{TeX},
+  breaklines=true,
+}
+
+% Include custom command definitions and tcolorbox settings
+\input{itemCommands.tex}
+\input{tcolorboxSettings.tex}
+
+
+% Define card dimensions
+\newlength{\cardwidth}
+\newlength{\cardheight}
+\setlength{\cardwidth}{2.5in} % Standard card width (2.5in default)
+\setlength{\cardheight}{3.5in} % Standard card height (3.5in default)
+
+% Define list of card files (separate with spaces)
+%\def\cardfiles{cardA, cardB, cardC, cardD, cardE, cardF, cardG, cardH}
+% This command lists all the files in the ``cards'' directory:
+% ls cards | grep -Po '.*(?=\.)' | paste -sd, - | xclip -selection clipboard
+\def\cardfiles{arrowShapechangerSlaying, cardArrowHead, LetterFromLadySybil, SerThamesFinishedLetter, SerThamesUnfinishedLetter, ScrollOfMoonbeam, MoonTouchedSword}
+
+% Count number of cards dynamically
+\newcount\cardcount
+\cardcount=0
+\foreach \x in \cardfiles { \global\advance\cardcount by 1 }
+
+% Create/initialize macros
+\newcommand{\cardtitle}{}
+\newcommand{\cardimage}{}
+\newcommand{\carddescfront}{}
+\newcommand{\carddescback}{}
+\newcommand{\cardbg}{}
+
+
+\begin{document}
+
+% ---- FRONT SIDE ----
+\begin{tikzpicture}
+    \newcount\index
+    \index=0
+    \foreach \filename in \cardfiles {%
+        \begingroup % Ensures scope is properly handled
+
+        \pgfmathtruncatemacro{\i}{\index / 3}  % Row index
+        \pgfmathtruncatemacro{\j}{mod(\index, 3)} % Column index
+
+        % Reset macros before loading new card
+        \renewcommand{\cardtitle}{Useless Rock}
+        \renewcommand{\cardbg}{B3.jpg}
+        \renewcommand{\cardimage}{item_pics/rock_NB.png}
+        \renewcommand{\carddescfront}{A useless rock you picked up for some reason.}
+        \renewcommand{\carddescback}{Why did you pick this up??}
+
+
+        % Include card data
+        \def\tmpFilename{cards/\filename}
+        \IfFileExists{\tmpFilename}{ \input{\tmpFilename} }{}
+        % Draw the card
+        \node[minimum width=\cardwidth, minimum height=\cardheight, draw, rectangle, fill=white, scale=1] at  ({\j * (\cardwidth + 0.12in)}, {-\i * (\cardheight + 0.02in)}) { \fontsize{6}{7}\selectfont
+            \begin{itemcard}{\cardtitle}
+                \begin{center}
+                    % Details in bottom of itemCommands.tex
+                    \begin{tcolorbox}[width=\linewidth, boxrule=1.5pt, colframe=black,  boxsep=0pt, top=0pt, bottom=0pt, left=0pt, right=0pt, enhanced, borderline={0.5mm}{0mm}{black}, interior style={fill stretch image=\cardbg}]
+                        \begin{center}
+                            \includegraphics[height=0.20\cardheight]{\cardimage}
+                        \end{center}
+                    \end{tcolorbox}
+                \end{center}\vspace*{-1.5em}
+                \begin{lowerpart}
+                    \carddescfront
+                \end{lowerpart}
+           \end{itemcard}
+        };
+
+        \global\advance\index by 1
+
+        \endgroup % Close scope
+    }
+\end{tikzpicture}
+
+\newpage
+
+% ---- BACK SIDE (Mirrored for Double-Sided Printing) ----
+\begin{tikzpicture}
+    \newcount\index
+    \index=0
+    \foreach \filename in \cardfiles {%
+        \begingroup % Ensures scope is properly handled
+
+        \pgfmathtruncatemacro{\i}{\index / 3}  % Row index
+        \pgfmathtruncatemacro{\j}{mod(\index, 3)}
+        %\pgfmathtruncatemacro{\j}{\index mod 3}  % Column index
+
+        % Reset macros before loading new card
+        \renewcommand{\cardtitle}{Useless Rock}
+        \renewcommand{\cardbg}{B3.jpg}
+        \renewcommand{\cardimage}{item_pics/rock_NB.png}
+        \renewcommand{\carddescfront}{A useless rock you picked up for some reason.}
+        \renewcommand{\carddescback}{Why did you pick this up??}
+
+
+        % Include card data
+        \def\tmpFilename{cards/\filename}
+        \IfFileExists{\tmpFilename}{ \input{\tmpFilename} }{}
+
+        % Draw the card
+        \node[minimum width=\cardwidth, minimum height=\cardheight, draw, rectangle, fill=white, scale=1] at  ({\j * (\cardwidth + 0.12in)}, {-\i * (\cardheight + 0.02in)}) { \fontsize{6}{7}\selectfont
+            \begin{itemcard}{\cardtitle}
+                \begin{backpart}
+                \carddescback
+                \end{backpart}
+           \end{itemcard}
+        };
+
+        \global\advance\index by 1
+
+        \endgroup % Close scope
+    }
+\end{tikzpicture}
+
+\end{document}
