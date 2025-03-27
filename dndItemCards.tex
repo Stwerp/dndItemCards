@@ -1,5 +1,5 @@
 \documentclass[letterpaper]{article}
-\usepackage[top=.2in, bottom=.1in, left=.1in, right=.1in]{geometry}
+\usepackage[top=0in, bottom=0in, left=0in, right=0in]{geometry}
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[singlelinecheck=false]{caption}
@@ -15,6 +15,7 @@
 \tcbuselibrary{skins}
 \usepackage{afterpage} % For controlling page breaks
 \usepackage{ifthen} % Add the ifthen package
+\usepackage{mathptmx} % font looks much better at smaller sizes!
 
 %\captionsetup[table]{labelformat=empty,font={sf,sc,bf,},skip=0pt}
 \MakeShortVerb{|}
@@ -55,7 +56,7 @@
 
 
 \begin{document}
-
+\fontsize{7.5}{8.5}\selectfont
 % ---- FRONT SIDE ----
 \begin{tikzpicture}
     \newcount\index
@@ -78,7 +79,7 @@
         \def\tmpFilename{cards/\filename}
         \IfFileExists{\tmpFilename}{ \input{\tmpFilename} }{}
         % Draw the card
-        \node[minimum width=\cardwidth, minimum height=\cardheight, draw, rectangle, fill=white, scale=1] at  ({\j * (\cardwidth + 0.12in)}, {-\i * (\cardheight + 0.02in)}) { \fontsize{6}{7}\selectfont
+        \node[minimum width=\cardwidth, minimum height=\cardheight, draw, rectangle, fill=white, scale=1] at  ({\j * (\cardwidth + 0.12in)}, {-\i * (\cardheight + 0.02in)}) {%
             \begin{itemcard}{\cardtitle}
                 \begin{center}
                     % Details in bottom of itemCommands.tex
@@ -126,7 +127,7 @@
         \IfFileExists{\tmpFilename}{ \input{\tmpFilename} }{}
 
         % Draw the card
-        \node[minimum width=\cardwidth, minimum height=\cardheight, draw, rectangle, fill=white, scale=1] at  ({\j * (\cardwidth + 0.12in)}, {-\i * (\cardheight + 0.02in)}) { \fontsize{6}{7}\selectfont
+        \node[minimum width=\cardwidth, minimum height=\cardheight, draw, rectangle, fill=white, scale=1] at  ({\j * (\cardwidth + 0.12in)}, {-\i * (\cardheight + 0.02in)}) {
             \begin{itemcard}{\cardtitle}
                 \begin{backpart}
                 \carddescback
