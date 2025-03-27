@@ -87,6 +87,34 @@
   \fi
 }
 
+% Schools are:
+%Abjuration, Conjuration, Divination, Enchantment, Evocation, Illusion, Necromancy, Transmutation
+\newcommand{\SpellCardText}[8]{% #1=Spell name, #2=level[10 to turn off], #3=school, #4=casting time, #5=Range, #6=duration, #7={1-concentration, 0-not}, #8=Components
+  \textbf{#1} \hfill
+  \ifnum#2<10
+  {\itshape
+    \ifnum#2=0
+      #3 Cantrip\\
+    \else
+        \ifnum#2=1
+        1\textsuperscript{st}
+        \fi
+        \ifnum#2=2
+        2\textsuperscript{nd}
+        \fi
+        \ifnum#2=3
+        3\textsuperscript{rd}
+        \fi
+        \ifnum#2>3
+        #2\textsuperscript{th}
+        \fi
+        level #3\\
+    \fi
+  \fi}
+  \textbf{Casting Time: }#4 \hfill \textbf{Range: }#5\\
+  \textbf{Duration: } {\ifnum#7=1  Concentration,  \fi} #6\\
+  \textbf{Components: } {#8}\\[2ex]
+}
 % \begin{itemcard}{Item Name}
 %     \begin{center}
 %       \begin{tcolorbox}[width=\linewidth, boxrule=3.0pt, colframe=black, colback=white, boxsep=0pt, top=0pt, bottom=0pt, left=0pt, right=0pt, center={yshift=-5mm}]
