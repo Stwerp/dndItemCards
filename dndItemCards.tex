@@ -1,5 +1,5 @@
 \documentclass[letterpaper]{article}
-\usepackage[top=0in, bottom=0in, left=0in, right=0in]{geometry}
+\usepackage[top=0.15in, bottom=0in, left=0.15in, right=0in]{geometry}
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[singlelinecheck=false]{caption}
@@ -23,6 +23,11 @@
   basicstyle=\ttfamily,
   language=[LaTeX]{TeX},
   breaklines=true,
+}
+
+\def\bwcards{0}% %{0 -- color, 1 -- black and white (mostly)}
+\newcommand{\printcolors}[2]{%
+  \ifnum\bwcards=0 \expandafter#1\else \expandafter#2\fi
 }
 
 % Include custom command definitions and tcolorbox settings
@@ -53,6 +58,7 @@
 \newcommand{\carddescfront}{}
 \newcommand{\carddescback}{}
 \newcommand{\cardbg}{}
+\newcommand{\cardcontinues}{}
 
 
 \begin{document}
@@ -73,17 +79,23 @@
         \renewcommand{\cardimage}{item_pics/rock_NB.png}
         \renewcommand{\carddescfront}{A useless rock you picked up for some reason.}
         \renewcommand{\carddescback}{Why did you pick this up??}
+        \renewcommand{\cardcontinues}{0} % 0 or 1
 
 
         % Include card data
         \def\tmpFilename{cards/\filename}
         \IfFileExists{\tmpFilename}{ \input{\tmpFilename} }{}
+        % load macros
+        %\setinteriorstyle
+        \def\interioroption{\printcolors{fill stretch image=\cardbg}{fill=white}}
         % Draw the card
         \node[minimum width=\cardwidth, minimum height=\cardheight, draw, rectangle, fill=white, scale=1] at  ({\j * (\cardwidth + 0.12in)}, {-\i * (\cardheight + 0.02in)}) {%
             \begin{itemcard}{\cardtitle}
                 \begin{center}
                     % Details in bottom of itemCommands.tex
-                    \begin{tcolorbox}[width=\linewidth, boxrule=1.5pt, colframe=black,  boxsep=0pt, top=0pt, bottom=0pt, left=0pt, right=0pt, enhanced, borderline={0.5mm}{0mm}{black}, interior style={fill stretch image=\cardbg}]
+                    %\begin{tcolorbox}[width=\linewidth, boxrule=1.5pt, colframe=black,  boxsep=0pt, top=0pt, bottom=0pt, left=0pt, right=0pt, enhanced, borderline={0.5mm}{0mm}{black}, interior style={\printcolors{fill stretch image=\cardb}]
+                    \begin{tcolorbox}[width=\linewidth, boxrule=1.5pt, colframe=black,  boxsep=0pt, top=0pt, bottom=0pt, left=0pt, right=0pt, enhanced, borderline={0.5mm}{0mm}{black}, interior style={\interioroption} ]
+                    %\begin{tcolorbox}[width=\linewidth, boxrule=1.5pt, colframe=black,  boxsep=0pt, top=0pt, bottom=0pt, left=0pt, right=0pt, enhanced, borderline={0.5mm}{0mm}{black}, interior style={fill stretch image=\cardbg}]
                         \begin{center}
                             \includegraphics[height=0.20\cardheight]{\cardimage}
                         \end{center}
@@ -91,10 +103,12 @@
                 \end{center}\vspace*{-1.5em}
                 \begin{lowerpart}
                     \carddescfront
+                    \ifnum\cardcontinues=1%
+                        \vfill \hfill \textit{continued on back...}%
+                    \fi%
                 \end{lowerpart}
            \end{itemcard}
         };
-
         \global\advance\index by 1
 
         \endgroup % Close scope
